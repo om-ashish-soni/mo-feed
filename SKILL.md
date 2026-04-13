@@ -162,9 +162,9 @@ ALL content rendered as cards. Never plain tables or bullets for content items.
 │       ♥ 10.7k   ↺ 723   ◎ 184          Apr 12, 2026 · 3h ago          │
 │                                                                          │
 │  Tweet text wrapped at ~70 chars, max 4 lines                            │
-│  Truncate with ... if longer                                             │
+│  Truncate with … if longer                                               │
 │                                                                          │
-│  -> x.com/i/web/status/ID                                                │
+│  → https://x.com/i/web/status/ID                                        │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -176,7 +176,7 @@ ALL content rendered as cards. Never plain tables or bullets for content items.
 │                                                                          │
 │  Show HN: Postgres extension for BM25 full-text search                  │
 │                                                                          │
-│  -> github.com/timescale/pg_textsearch                                   │
+│  → https://github.com/timescale/pg_textsearch                            │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -184,11 +184,11 @@ ALL content rendered as cards. Never plain tables or bullets for content items.
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
 │ ○ #N  source: GitHub                                 [P1] Infra         │
-│       ⭐ 1.2k stars   🍴 89 forks   lang: Go       Apr 10, 2026 · 2d   │
+│       ⭐ 1.2k stars   🍴 89 forks   lang: Go        Apr 10, 2026 · 2d ago │
 │                                                                          │
 │  owner/repo — Description text here                                      │
 │                                                                          │
-│  -> github.com/owner/repo                                                │
+│  → https://github.com/owner/repo                                         │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -201,7 +201,7 @@ ALL content rendered as cards. Never plain tables or bullets for content items.
 │  Paper Title Here                                                        │
 │  Authors: First, Second, Third                                           │
 │                                                                          │
-│  -> arxiv.org/abs/2604.12345                                             │
+│  → https://arxiv.org/abs/2604.12345                                      │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -213,7 +213,7 @@ ALL content rendered as cards. Never plain tables or bullets for content items.
 │                                                                          │
 │  org/model-name — 7B param, Apache 2.0                                  │
 │                                                                          │
-│  -> huggingface.co/org/model-name                                        │
+│  → https://huggingface.co/org/model-name                                 │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -225,7 +225,7 @@ ALL content rendered as cards. Never plain tables or bullets for content items.
 │                                                                          │
 │  Title of the post                                                       │
 │                                                                          │
-│  -> lobste.rs/s/abc123                                                   │
+│  → https://lobste.rs/s/abc123                                            │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -234,8 +234,8 @@ ALL content rendered as cards. Never plain tables or bullets for content items.
 2. Header: read-status icon + source/author left, `[tier] topic` right-aligned
 3. **Date line**: engagement stats LEFT, date + relative time RIGHT (e.g., `Apr 12, 2026 · 3h ago`)
 4. Engagement: K/M suffixes for >999
-5. Text: wrap ~70 chars, max 4 lines, truncate with ...
-6. Link: always `-> URL` at bottom
+5. Text: wrap ~70 chars, max 4 lines, truncate with …
+6. Link: always `→ https://FULL_URL` at bottom (MUST include `https://` prefix so terminals render clickable links)
 7. Tier section headers: `━━━ P0: AGENTIC AI ━━━━━━━━━━━━━━━━━━━━━━━━━━━`
 
 #### Date Display Rules
@@ -256,9 +256,9 @@ Default: all items start as `○` (unread). When user says "mark read", "done", 
 #### Action Items Box (after all cards)
 ```
 ┌─── ACTION ITEMS ──────────────────────────────────────────────────────┐
-│  📄 @author — description -> URL                                      │
-│  ⭐ repo — description -> URL                                         │
-│  🔧 tool — description -> URL                                         │
+│  📄 @author — description → https://URL                                │
+│  ⭐ repo — description → https://URL                                   │
+│  🔧 tool — description → https://URL                                   │
 └──────────────────────────────────────────────────────────────────────┘
 ```
 

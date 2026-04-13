@@ -77,7 +77,7 @@ Or invoke directly:
 │  Introducing Claude Code skills — reusable agent capabilities           │
 │  that extend what Claude can do in your terminal...                      │
 │                                                                          │
-│  -> x.com/i/web/status/1234567890                                        │
+│  → https://x.com/i/web/status/1234567890                                        │
 └──────────────────────────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -87,7 +87,7 @@ Or invoke directly:
 │  alchaincyf/hermes-agent-orange-book — Comprehensive guide              │
 │  for Nous Research's agent framework                                     │
 │                                                                          │
-│  -> github.com/alchaincyf/hermes-agent-orange-book                       │
+│  → https://github.com/alchaincyf/hermes-agent-orange-book                       │
 └──────────────────────────────────────────────────────────────────────────┘
 
 ━━━ P1: DATABASES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -98,7 +98,7 @@ Or invoke directly:
 │                                                                          │
 │  Show HN: Postgres extension for BM25 full-text search                  │
 │                                                                          │
-│  -> github.com/timescale/pg_textsearch                                   │
+│  → https://github.com/timescale/pg_textsearch                                   │
 └──────────────────────────────────────────────────────────────────────────┘
 
 ┌─── ACTION ITEMS ──────────────────────────────────────────────────────┐

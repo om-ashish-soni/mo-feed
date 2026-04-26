@@ -1,14 +1,21 @@
 # mo-feed
 
-Tech intelligence pipeline for Claude Code. Fetch from 7+ sources. Classify by priority. Display TUI cards. Ingest into a markdown knowledge base.
+Unified tech intelligence pipeline for Claude Code. Fetch from 10+ sources — including
+Twitter, Instagram, LinkedIn, and YouTube via the [headless-*](https://github.com/om-ashish-soni?tab=repositories&q=headless)
+Chrome CDP skills (zero API keys, read-only by design). Classify by priority. Display
+TUI cards. Ingest into a markdown knowledge base.
 
 ```
-Twitter ──┐
-HN ───────┤
-GitHub ───┤──→ Classify (P0-P3) ──→ TUI Cards ──→ Knowledge Base
-arXiv ────┤
-HF ───────┤
-Lobsters ─┘
+Twitter ────┐
+Instagram ──┤   (headless-* Chrome CDP intercept, read-only)
+LinkedIn ───┤
+YouTube ────┤
+HN ─────────┤──→ Classify (P0-P3) ──→ TUI Cards ──→ Knowledge Base
+GitHub ─────┤
+arXiv ──────┤
+HF ─────────┤
+Lobsters ───┤
+Reddit ─────┘
 ```
 
 ## What It Does
@@ -17,7 +24,7 @@ Lobsters ─┘
 
 | Phase | What happens |
 |-------|-------------|
-| **Fetch** | Pulls from Twitter, Hacker News, GitHub trending, arXiv, HuggingFace, Lobsters, Reddit — in parallel |
+| **Fetch** | Pulls from Twitter, Instagram, LinkedIn, YouTube, Hacker News, GitHub, arXiv, HuggingFace, Lobsters, Reddit — in parallel |
 | **Classify** | Sorts every item into P0-P3 priority tiers using customizable keyword matching |
 | **Display** | Renders TUI cards in your terminal, grouped by tier, sorted by engagement |
 | **Track** | Maintains a reading list with unread/read status |
@@ -39,11 +46,23 @@ git clone https://github.com/om-ashish-soni/mo-feed.git ~/.claude/skills/mo-feed
 
 ### Prerequisites
 ```bash
-# Required: headless-twitter for Twitter fetching (Chrome CDP, zero API keys)
+# Required: headless-* skills for social fetches (Chrome CDP, zero API keys)
+# headless-twitter is published on npm; the other three are GitHub-only for
+# now — clone each skill repo and `npm link` it so the bare CLI is on PATH.
 npm install -g headless-twitter
+for repo in headless-instagram headless-linkedin headless-youtube; do
+  git clone "https://github.com/om-ashish-soni/$repo.git" "$HOME/.claude/skills/$repo"
+  ( cd "$HOME/.claude/skills/$repo" && npm install && npm link )
+done
 
 # Required: jq for JSON processing
 sudo apt install jq   # or: brew install jq
+
+# Chrome must be running with remote debugging on port 9222 with the user
+# logged into Twitter/Instagram/LinkedIn/YouTube. The same browser is shared
+# by all four headless-* skills (they intercept different domains).
+google-chrome --remote-debugging-port=9222 \
+  --user-data-dir=$HOME/.config/google-chrome
 ```
 
 ## Usage
@@ -54,6 +73,10 @@ Just talk to Claude Code:
 > catch me up                          # Full scan: all sources, all tiers
 > what's new in databases              # Topic scan: database-focused
 > scan twitter                         # Source scan: Twitter only
+> scan instagram                       # Tech reels via headless-instagram
+> scan linkedin                        # Feed posts via headless-linkedin
+> scan youtube                         # Trending tech via headless-youtube
+> social feed                          # All four headless-* sources only
 > quick feed                           # Headlines only, no ingest
 > what do I know about transformers    # Query your knowledge base
 > what's pending                       # Show unread items
@@ -159,7 +182,7 @@ Say "quick feed" instead of "catch me up" for read-only mode (no KB writes).
 
 ## How It Works
 
-1. **headless-twitter** connects to your running Chrome via CDP (Chrome DevTools Protocol) — intercepts Twitter's GraphQL responses directly. No API keys. No browser downloads. Read-only by design (3-layer write protection).
+1. **headless-\* skills** ([twitter](https://github.com/om-ashish-soni/headless-twitter), [instagram](https://github.com/om-ashish-soni/headless-instagram), [linkedin](https://github.com/om-ashish-soni/headless-linkedin), [youtube](https://github.com/om-ashish-soni/headless-youtube)) connect to your already-running Chrome via CDP (Chrome DevTools Protocol) on port 9222 — they intercept Twitter's GraphQL, Instagram's GraphQL, LinkedIn's Voyager API, and YouTube's youtubei JSON responses directly. No API keys. No browser downloads. All four enforce 3-layer read-only protection (zero mutations). The same Chrome instance is shared across all four; each skill listens for a different domain.
 
 2. **Cross-reference APIs** (HN Algolia, GitHub Search, HuggingFace, Lobsters JSON, arXiv, Reddit) are hit in parallel via curl. No auth needed for any of them.
 
@@ -167,13 +190,16 @@ Say "quick feed" instead of "catch me up" for read-only mode (no KB writes).
 
 4. **Knowledge base** is pure markdown on your filesystem. `hierarchy.md` files act as indexes. Claude navigates them like a developer navigates a codebase. No embedding, no vector DB, no sync pipeline.
 
+5. **Anti-doom-scroll** — `headless-youtube` enforces hard caps on results (max 50) and scroll iterations (max 8), and force-mutes/pauses the video element. `headless-instagram` defaults to a `--tech` filter (tech-intro detection) so the reel feed isn't generic noise. mo-feed never raises these caps.
+
 ## Modes
 
 | Mode | Trigger | Sources | Ingest |
 |------|---------|---------|--------|
 | Full scan | "catch me up", "mo feed" | All | Yes |
 | Topic scan | "what's new in [topic]" | Targeted | Yes |
-| Source scan | "scan twitter" | Single | P0/P1 only |
+| Source scan | "scan twitter" / "scan instagram" / "scan linkedin" / "scan youtube" / "scan HN" / ... | Single | P0/P1 only |
+| Social scan | "social feed", "scan socials" | Twitter + IG + LI + YT only | P0/P1 only |
 | Quick peek | "quick feed" | Twitter | No |
 | Query KB | "what do I know about X" | None (reads KB) | No |
 | Ingest only | "remember this" | None | Yes |
@@ -184,8 +210,11 @@ Say "quick feed" instead of "catch me up" for read-only mode (no KB writes).
 
 - [Claude Code](https://claude.ai/code) (CLI, desktop, or IDE extension)
 - [headless-twitter](https://github.com/om-ashish-soni/headless-twitter) (`npm i -g headless-twitter`)
+- [headless-instagram](https://github.com/om-ashish-soni/headless-instagram) (`npm i -g headless-instagram`)
+- [headless-linkedin](https://github.com/om-ashish-soni/headless-linkedin) (`npm i -g headless-linkedin`)
+- [headless-youtube](https://github.com/om-ashish-soni/headless-youtube) (`npm i -g headless-youtube`)
 - [jq](https://jqlang.github.io/jq/) (`apt install jq` / `brew install jq`)
-- Chrome/Chromium (for Twitter fetching — uses your existing logged-in session)
+- Chrome/Chromium running with `--remote-debugging-port=9222` and logged into the social sites you want to scan
 
 ## License
 
